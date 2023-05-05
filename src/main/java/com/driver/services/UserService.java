@@ -23,8 +23,10 @@ public class UserService {
 
 
 
-@Autowired
+    @Autowired
     UserRepository userRepository;
+    @Autowired
+    WebSeriesRepository webSeriesRepository;
 
 
 
@@ -37,7 +39,7 @@ public class UserService {
 
 
 
-        return 0;
+        return user.getId();
     }
 
     public Integer getAvailableCountOfWebSeriesViewable(Integer userId){

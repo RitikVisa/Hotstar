@@ -23,128 +23,8 @@ public class WebSeriesService {
 
    @Autowired
     WebSeriesRepository webSeriesRepository;
-
-    ProductionHouseRepository productionHouseRepository = new ProductionHouseRepository() {
-        @Override
-        public List<ProductionHouse> findAll() {
-            return null;
-        }
-
-        @Override
-        public List<ProductionHouse> findAll(Sort sort) {
-            return null;
-        }
-
-        @Override
-        public List<ProductionHouse> findAllById(Iterable<Integer> iterable) {
-            return null;
-        }
-
-        @Override
-        public <S extends ProductionHouse> List<S> saveAll(Iterable<S> iterable) {
-            return null;
-        }
-
-        @Override
-        public void flush() {
-
-        }
-
-        @Override
-        public <S extends ProductionHouse> S saveAndFlush(S s) {
-            return null;
-        }
-
-        @Override
-        public void deleteInBatch(Iterable<ProductionHouse> iterable) {
-
-        }
-
-        @Override
-        public void deleteAllInBatch() {
-
-        }
-
-        @Override
-        public ProductionHouse getOne(Integer integer) {
-            return null;
-        }
-
-        @Override
-        public <S extends ProductionHouse> List<S> findAll(Example<S> example) {
-            return null;
-        }
-
-        @Override
-        public <S extends ProductionHouse> List<S> findAll(Example<S> example, Sort sort) {
-            return null;
-        }
-
-        @Override
-        public Page<ProductionHouse> findAll(Pageable pageable) {
-            return null;
-        }
-
-        @Override
-        public <S extends ProductionHouse> S save(S s) {
-            return null;
-        }
-
-        @Override
-        public Optional<ProductionHouse> findById(Integer integer) {
-            return Optional.empty();
-        }
-
-        @Override
-        public boolean existsById(Integer integer) {
-            return false;
-        }
-
-        @Override
-        public long count() {
-            return 0;
-        }
-
-        @Override
-        public void deleteById(Integer integer) {
-
-        }
-
-        @Override
-        public void delete(ProductionHouse productionHouse) {
-
-        }
-
-        @Override
-        public void deleteAll(Iterable<? extends ProductionHouse> iterable) {
-
-        }
-
-        @Override
-        public void deleteAll() {
-
-        }
-
-        @Override
-        public <S extends ProductionHouse> Optional<S> findOne(Example<S> example) {
-            return Optional.empty();
-        }
-
-        @Override
-        public <S extends ProductionHouse> Page<S> findAll(Example<S> example, Pageable pageable) {
-            return null;
-        }
-
-        @Override
-        public <S extends ProductionHouse> long count(Example<S> example) {
-            return 0;
-        }
-
-        @Override
-        public <S extends ProductionHouse> boolean exists(Example<S> example) {
-            return false;
-        }
-    };
+    @Autowired
+    ProductionHouseRepository productionHouseRepository;
 
     public Integer addWebSeries(WebSeriesEntryDto webSeriesEntryDto)throws  Exception{
 
@@ -152,32 +32,16 @@ public class WebSeriesService {
         //Incase the seriesName is already present in the Db throw Exception("Series is already present")
         //use function written in Repository Layer for the same
         //Dont forget to save the production and webseries Repo
-
-//        if(webSeriesRepository.findBySeriesName(webSeriesEntryDto.getSeriesName()))
-        try{
-            webSeriesRepository.findBySeriesName(webSeriesEntryDto.getSeriesName());
-        }catch(Exception e){
-            throw new Exception("Series is already present");
-        }
-
-        WebSeries w = new WebSeries();
+        WebSeries w =new WebSeries();
         w.setSeriesName(webSeriesEntryDto.getSeriesName());
         w.setRating(webSeriesEntryDto.getRating());
         w.setAgeLimit(webSeriesEntryDto.getAgeLimit());
         w.setSubscriptionType(webSeriesEntryDto.getSubscriptionType());
 
-
-
-
         ProductionHouse p = productionHouseRepository.findById(webSeriesEntryDto.getProductionHouseId()).get();
-        if(p.getWebSeriesList().isEmpty()){
-            p.setRatings(w.getRating());
-            productionHouseRepository.save(p);
-            return 1;
-        }
-
-
         p.getWebSeriesList().add(w);
+
+//        if(webSeriesRepository.findBySeriesName(webSeriesEntryDto.getSeriesName()))
 
         double allRating= 0;
 
@@ -190,7 +54,7 @@ public class WebSeriesService {
             }
             p.setRatings(allRating/p.getWebSeriesList().size());
 
-        p.setRatings(w.getRating());
+            p.setRatings(w.getRating());
 
         productionHouseRepository.save(p);
 
@@ -198,7 +62,7 @@ public class WebSeriesService {
 
 
 
-        return 111;
+        return 1;
     }
 
 }
