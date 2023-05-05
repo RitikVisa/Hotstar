@@ -32,37 +32,43 @@ public class WebSeriesService {
         //Incase the seriesName is already present in the Db throw Exception("Series is already present")
         //use function written in Repository Layer for the same
         //Dont forget to save the production and webseries Repo
-        WebSeries w =new WebSeries();
-        w.setSeriesName(webSeriesEntryDto.getSeriesName());
-        w.setRating(webSeriesEntryDto.getRating());
-        w.setAgeLimit(webSeriesEntryDto.getAgeLimit());
-        w.setSubscriptionType(webSeriesEntryDto.getSubscriptionType());
-
-        ProductionHouse p = productionHouseRepository.findById(webSeriesEntryDto.getProductionHouseId()).get();
-        p.getWebSeriesList().add(w);
-
-//        if(webSeriesRepository.findBySeriesName(webSeriesEntryDto.getSeriesName()))
-
-        double allRating= 0;
+       String name = webSeriesEntryDto.getSeriesName();
 
 
+         if(webSeriesRepository.findBySeriesName(name).equals(false)) {
+             WebSeries w =new WebSeries();
+             w.setSeriesName(webSeriesEntryDto.getSeriesName());
+             w.setRating(webSeriesEntryDto.getRating());
+             w.setAgeLimit(webSeriesEntryDto.getAgeLimit());
+             w.setSubscriptionType(webSeriesEntryDto.getSubscriptionType());
 
-            for(WebSeries web : p.getWebSeriesList()){
+             ProductionHouse p = productionHouseRepository.findById(webSeriesEntryDto.getProductionHouseId()).get();
+             p.getWebSeriesList().add(w);
 
-                allRating+=web.getRating();
-
-            }
-            p.setRatings(allRating/p.getWebSeriesList().size());
-
-            p.setRatings(w.getRating());
-
-        productionHouseRepository.save(p);
+             double allRating= 0;
 
 
 
+             for(WebSeries web : p.getWebSeriesList()){
+
+                 allRating+=web.getRating();
+
+             }
+             p.setRatings(allRating/p.getWebSeriesList().size());
+
+             p.setRatings(w.getRating());
+
+             productionHouseRepository.save(p);
+             return w.getId();
+         }
+      else {
+           throw new Exception("Series is already present");
+       }
 
 
-        return 1;
+
+
+
     }
 
 }

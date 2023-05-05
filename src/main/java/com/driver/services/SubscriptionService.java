@@ -67,9 +67,6 @@ public class SubscriptionService {
         //If you are already at an ElITE subscription : then throw Exception ("Already the best Subscription")
         //In all other cases just try to upgrade the subscription and tell the difference of price that user has to pay
         //update the subscription in the repository
-        if(!userRepository.findById(userId).isPresent()){
-            throw new Exception("user not present");
-        }
 
         User user = userRepository.findById(userId).get();
 

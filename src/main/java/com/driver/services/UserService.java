@@ -36,9 +36,6 @@ public class UserService {
         userRepository.save(user);
 
 
-
-
-
         return user.getId();
     }
 
@@ -47,19 +44,25 @@ public class UserService {
         //Return the count of all webSeries that a user can watch based on his ageLimit and subscriptionType
         //Hint: Take out all the Webseries from the WebRepository
 //
-//        if(!userRepository.findById(userId).isPresent()){
-//            return 0;
-//        }
-//        User user = userRepository.findById(userId).get();
-//
-//        SubscriptionType subscriptionType=user.getSubscription().getSubscriptionType();
-//
-//        List<WebSeries> listOfWebSeries = new ArrayList<>();
-//        listOfWebSeries= webSeriesRepository.findByAgeLimit(user.getAge(),subscriptionType);
+        if(!userRepository.findById(userId).isPresent()){
+            return 0;
+        }
+        User user = userRepository.findById(userId).get();
+
+        SubscriptionType subscriptionType=user.getSubscription().getSubscriptionType();
+
+        List<WebSeries> allWebSeries = webSeriesRepository.findAll();
+        List<WebSeries> listweb =new ArrayList<>();
+
+        for(WebSeries web : allWebSeries){
+            if(web.getAgeLimit()<=user.getAge() && web.getSubscriptionType().equals(user.getSubscription().getSubscriptionType())){
+                listweb.add(web);
+            }
+        }
 
 
 
-        return 0;
+        return listweb.size();
     }
 
 

@@ -13,6 +13,8 @@ import java.util.List;
 public interface WebSeriesRepository extends JpaRepository<WebSeries,Integer> {
 
     WebSeries findBySeriesName(String seriesName);
+
+
 //    @Query(value ="select * from web_series w where  w.age_limit >:age and w.subscription_type=:subscriptionTye",nativeQuery = true)
 //    List<WebSeries> findByAgeLimit(int age, SubscriptionType subscriptionType);
 }

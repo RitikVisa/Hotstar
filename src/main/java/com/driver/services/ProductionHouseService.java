@@ -27,13 +27,7 @@ public class ProductionHouseService {
 
     public Integer addProductionHouseToDb(ProductionHouseEntryDto productionHouseEntryDto) {
 
-
-        //we need to transform
-
         String name = productionHouseEntryDto.getName();
-//        if(productionHouseRepository.findByName(name)==productionHouseEntryDto.getName()){
-//            throw new ProductionAlreadyExists("Production already exists");
-//        }
        ProductionHouse productionHouse = new ProductionHouse();
        productionHouse.setRatings(0);
        productionHouse.setName(name);
@@ -41,7 +35,8 @@ public class ProductionHouseService {
 
        productionHouseRepository.save(productionHouse);
 
-        return  1;
+
+        return  productionHouse.getId();
     }
 
 
