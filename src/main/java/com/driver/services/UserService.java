@@ -32,15 +32,18 @@ public class UserService {
 
     public Integer addUser(User user){
 
-        //Jut simply add the user to the Db and return the userId returned by the repository
         userRepository.save(user);
-        List<User> userList = userRepository.findAll();
-        for(User us :userList){
-            if(us.getName().equals(user.getName())){
-                return us.getId();
-            }
-        }
 
+        List<User> userList = userRepository.findAll();
+        if(!userList.isEmpty()){
+          for(User user1 : userList){
+              if(user1.getName().equals(user.getName())){
+                  return user1.getId();
+              }
+
+          }
+
+        }
        return 0;
     }
 
@@ -50,17 +53,23 @@ public class UserService {
         //Hint: Take out all the Webseries from the WebRepository
 //
         User user = userRepository.findById(userId).get();
-
-        SubscriptionType subscriptionType=user.getSubscription().getSubscriptionType();
-
-        List<WebSeries> allWebSeries = webSeriesRepository.findAll();
         List<WebSeries> listweb =new ArrayList<>();
+        if(userRepository.findById(userId).isPresent()){
+            SubscriptionType subscriptionType=user.getSubscription().getSubscriptionType();
+            List<WebSeries> allWebSeries = webSeriesRepository.findAll();
 
-        for(WebSeries web : allWebSeries){
-            if(web.getAgeLimit()<=user.getAge() && web.getSubscriptionType().equals(user.getSubscription().getSubscriptionType())){
-                listweb.add(web);
+
+            for(WebSeries web : allWebSeries){
+                if(web.getAgeLimit()<=user.getAge() && web.getSubscriptionType().equals(user.getSubscription().getSubscriptionType())){
+                    listweb.add(web);
+                }
             }
+
         }
+
+
+
+
 
 
 

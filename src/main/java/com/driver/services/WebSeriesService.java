@@ -32,35 +32,41 @@ public class WebSeriesService {
         //Incase the seriesName is already present in the Db throw Exception("Series is already present")
         //use function written in Repository Layer for the same
         //Dont forget to save the production and webseries Repo
+        List<WebSeries> webSeriesList = webSeriesRepository.findAll();
+        for(WebSeries webs: webSeriesList){
+            if(webs.getSeriesName().equals(webSeriesEntryDto.getSeriesName())){
+                throw new Exception("Series is already present");
+            }
+        }
 
-        try {
-            webSeriesRepository.findBySeriesName(webSeriesEntryDto.getSeriesName());
-            throw new Exception("Series is already present");
-        }catch (Exception e){
+
             WebSeries w =new WebSeries();
             w.setSeriesName(webSeriesEntryDto.getSeriesName());
             w.setRating(webSeriesEntryDto.getRating());
             w.setAgeLimit(webSeriesEntryDto.getAgeLimit());
             w.setSubscriptionType(webSeriesEntryDto.getSubscriptionType());
 
-            ProductionHouse p = productionHouseRepository.findById(webSeriesEntryDto.getProductionHouseId()).get();
-            p.getWebSeriesList().add(w);
-            w.setProductionHouse(p);
+            List<ProductionHouse> productionHouseList = productionHouseRepository.findAll();
+            for(ProductionHouse p : productionHouseList){
+                if(p.getId()==webSeriesEntryDto.getProductionHouseId()){
+                    p.getWebSeriesList().add(w);
+                    w.setProductionHouse(p);
 
-            double allRating= 0;
+                    double allRating= 0;
 
-            for(WebSeries web : p.getWebSeriesList()){
+                    for(WebSeries web : p.getWebSeriesList()){
 
-                allRating+=web.getRating();
+                        allRating += web.getRating();
 
+                    }
+                    p.setRatings(allRating/p.getWebSeriesList().size());
+
+                    p.setRatings(w.getRating());
+
+                    productionHouseRepository.save(p);
+                    return w.getId();
+                }
             }
-            p.setRatings(allRating/p.getWebSeriesList().size());
-
-            p.setRatings(w.getRating());
-
-            productionHouseRepository.save(p);
-            return w.getId();
-        }
 
 
 
@@ -71,6 +77,9 @@ public class WebSeriesService {
 
 
 
+
+
+  return 0;
 
     }
 

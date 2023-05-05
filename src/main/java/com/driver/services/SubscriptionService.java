@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -30,9 +31,7 @@ public class SubscriptionService {
     public Integer buySubscription(SubscriptionEntryDto subscriptionEntryDto){
 
         //Save The subscription Object into the Db and return the total Amount that user has to pay
-        if(!userRepository.findById(subscriptionEntryDto.getUserId()).isPresent()){
-            return 0;
-        }
+
         User user = userRepository.findById(subscriptionEntryDto.getUserId()).get();
 
         Subscription newSubscription= new Subscription();
@@ -40,15 +39,16 @@ public class SubscriptionService {
         newSubscription.setNoOfScreensSubscribed(subscriptionEntryDto.getNoOfScreensRequired());
         newSubscription.setUser(user);
         user.setSubscription(newSubscription);
-        subscriptionRepository.save(newSubscription);
+        userRepository.save(user);
 
-      if(subscriptionEntryDto.getSubscriptionType().equals(SubscriptionType.BASIC)){
+
+      if(newSubscription.getSubscriptionType().equals(SubscriptionType.BASIC)){
           return 200;
       }
-        if(subscriptionEntryDto.getSubscriptionType().equals(SubscriptionType.PRO)){
+        if(newSubscription.getSubscriptionType().equals(SubscriptionType.PRO)){
             return 800;
         }
-        if(subscriptionEntryDto.getSubscriptionType().equals(SubscriptionType.ELITE)){
+        if(newSubscription.getSubscriptionType().equals(SubscriptionType.ELITE)){
             return 1000;
         }
 
@@ -89,7 +89,7 @@ public class SubscriptionService {
 //            subscriptionRepository.findById(user.getSubscription().getId()).get().setTotalAmountPaid(1000);
 //            subscriptionRepository.findById(user.getSubscription().getId()).get().setStartSubscriptionDate(new Date());
 
-
+            userRepository.save(user);
            return 200 ;
         }
         if(user.getSubscription().getSubscriptionType().equals(SubscriptionType.BASIC)){
@@ -98,6 +98,7 @@ public class SubscriptionService {
             sub.setTotalAmountPaid(800);
             sub.setStartSubscriptionDate(new Date());
             user.setSubscription(sub);
+            userRepository.save(user);
             return 300;
         }
 
@@ -108,14 +109,15 @@ public class SubscriptionService {
 
         //We need to find out total Revenue of hotstar : from all the subscriptions combined
         //Hint is to use findAll function from the SubscriptionDb
+        Integer revenue =0;
 
-        List<Subscription> subscriptionList= subscriptionRepository.findAll();
-        int revenue=0;
-        for(Subscription sub:subscriptionList){
-            revenue += sub.getTotalAmountPaid();
-
-
+        List<Subscription> subscriptionList = new ArrayList<>();
+        subscriptionList= subscriptionRepository.findAll();
+        for(Subscription s : subscriptionList){
+            revenue += s.getTotalAmountPaid();
         }
+
+
 
 
         return revenue;
