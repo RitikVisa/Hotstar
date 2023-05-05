@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("subscription")
 public class SubscriptionController {
 
-    @Autowired
-    SubscriptionService subscriptionService;
+
+    SubscriptionService subscriptionService = new SubscriptionService();
 
     @PostMapping("/buy")
     public Integer buySubscription(SubscriptionEntryDto subscriptionEntryDto){
@@ -36,9 +36,10 @@ public class SubscriptionController {
         //and at the end return the difference in fare that you need to pay to get this subscription done.
         try{
             return subscriptionService.upgradeSubscription(userId);
-        }catch (Exception e){
-            return -1;
+        } catch (Exception e) {
+            throw new RuntimeException("Already the best Subscription");
         }
+
     }
 
     @GetMapping("/calculateTotalRevenue")
