@@ -32,19 +32,9 @@ public class UserService {
 
     public Integer addUser(User user){
 
-        userRepository.save(user);
+       userRepository.save(user);
 
-        List<User> userList = userRepository.findAll();
-        if(!userList.isEmpty()){
-          for(User user1 : userList){
-              if(user1.getName().equals(user.getName())){
-                  return user1.getId();
-              }
-
-          }
-
-        }
-       return 0;
+       return user.getId();
     }
 
     public Integer getAvailableCountOfWebSeriesViewable(Integer userId){

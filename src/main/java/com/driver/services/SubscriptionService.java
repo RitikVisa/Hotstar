@@ -32,15 +32,13 @@ public class SubscriptionService {
 
         //Save The subscription Object into the Db and return the total Amount that user has to pay
 
-        User user = userRepository.findById(subscriptionEntryDto.getUserId()).get();
+
 
         Subscription newSubscription= new Subscription();
         newSubscription.setSubscriptionType(subscriptionEntryDto.getSubscriptionType());
         newSubscription.setNoOfScreensSubscribed(subscriptionEntryDto.getNoOfScreensRequired());
-        newSubscription.setUser(user);
-        user.setSubscription(newSubscription);
-        userRepository.save(user);
 
+        userRepository.save(userRepository.findById(subscriptionEntryDto.getUserId()).get());
 
       if(newSubscription.getSubscriptionType().equals(SubscriptionType.BASIC)){
           return 200;
