@@ -145,7 +145,7 @@ public class ProductionHouseService {
         }
     };
 
-    public Integer addProductionHouseToDb(ProductionHouseEntryDto productionHouseEntryDto) throws Exception {
+    public Integer addProductionHouseToDb(ProductionHouseEntryDto productionHouseEntryDto) {
 
 
         //we need to transform
