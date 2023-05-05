@@ -32,38 +32,41 @@ public class WebSeriesService {
         //Incase the seriesName is already present in the Db throw Exception("Series is already present")
         //use function written in Repository Layer for the same
         //Dont forget to save the production and webseries Repo
-       String name = webSeriesEntryDto.getSeriesName();
+
+        try {
+            webSeriesRepository.findBySeriesName(webSeriesEntryDto.getSeriesName());
+            throw new Exception("Series is already present");
+        }catch (Exception e){
+            WebSeries w =new WebSeries();
+            w.setSeriesName(webSeriesEntryDto.getSeriesName());
+            w.setRating(webSeriesEntryDto.getRating());
+            w.setAgeLimit(webSeriesEntryDto.getAgeLimit());
+            w.setSubscriptionType(webSeriesEntryDto.getSubscriptionType());
+
+            ProductionHouse p = productionHouseRepository.findById(webSeriesEntryDto.getProductionHouseId()).get();
+            p.getWebSeriesList().add(w);
+            w.setProductionHouse(p);
+
+            double allRating= 0;
+
+            for(WebSeries web : p.getWebSeriesList()){
+
+                allRating+=web.getRating();
+
+            }
+            p.setRatings(allRating/p.getWebSeriesList().size());
+
+            p.setRatings(w.getRating());
+
+            productionHouseRepository.save(p);
+            return w.getId();
+        }
 
 
-         if(webSeriesRepository.findBySeriesName(name).equals(false)) {
-             WebSeries w =new WebSeries();
-             w.setSeriesName(webSeriesEntryDto.getSeriesName());
-             w.setRating(webSeriesEntryDto.getRating());
-             w.setAgeLimit(webSeriesEntryDto.getAgeLimit());
-             w.setSubscriptionType(webSeriesEntryDto.getSubscriptionType());
-
-             ProductionHouse p = productionHouseRepository.findById(webSeriesEntryDto.getProductionHouseId()).get();
-             p.getWebSeriesList().add(w);
-
-             double allRating= 0;
 
 
 
-             for(WebSeries web : p.getWebSeriesList()){
 
-                 allRating+=web.getRating();
-
-             }
-             p.setRatings(allRating/p.getWebSeriesList().size());
-
-             p.setRatings(w.getRating());
-
-             productionHouseRepository.save(p);
-             return w.getId();
-         }
-      else {
-           throw new Exception("Series is already present");
-       }
 
 
 

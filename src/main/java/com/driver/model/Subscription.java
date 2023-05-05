@@ -23,7 +23,7 @@ public class Subscription {
     private SubscriptionType subscriptionType;
 
     private int noOfScreensSubscribed;
-    @CreationTimestamp
+
     private Date startSubscriptionDate;
 
     private int totalAmountPaid;
