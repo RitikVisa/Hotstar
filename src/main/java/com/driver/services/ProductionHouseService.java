@@ -2,7 +2,7 @@ package com.driver.services;
 
 
 import com.driver.EntryDto.ProductionHouseEntryDto;
-import com.driver.Exception.ProductionAlreadyExists;
+//import com.driver.Exception.ProductionAlreadyExists;
 import com.driver.model.ProductionHouse;
 import com.driver.model.WebSeries;
 import com.driver.repository.ProductionHouseRepository;
@@ -145,7 +145,7 @@ public class ProductionHouseService {
         }
     };
 
-    public Integer addProductionHouseToDb(ProductionHouseEntryDto productionHouseEntryDto) throws ProductionAlreadyExists {
+    public Integer addProductionHouseToDb(ProductionHouseEntryDto productionHouseEntryDto) throws Exception {
 
 
         //we need to transform
