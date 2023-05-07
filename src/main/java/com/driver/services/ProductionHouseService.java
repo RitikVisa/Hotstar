@@ -28,14 +28,15 @@ public class ProductionHouseService {
     public Integer addProductionHouseToDb(ProductionHouseEntryDto productionHouseEntryDto) {
 
        ProductionHouse productionHouse = new ProductionHouse();
-       productionHouse.setRatings(0);
+
        productionHouse.setName(productionHouseEntryDto.getName());
+        productionHouse.setRatings(0);
 
 
-       productionHouseRepository.save(productionHouse);
+       ProductionHouse savedProduction = productionHouseRepository.save(productionHouse);
 
 
-        return  productionHouse.getId();
+        return  savedProduction.getId();
     }
 
 

@@ -32,9 +32,9 @@ public class UserService {
 
     public Integer addUser(User user){
 
-       userRepository.save(user);
+       User u = userRepository.save(user);
 
-       return user.getId();
+       return u.getId();
     }
 
     public Integer getAvailableCountOfWebSeriesViewable(Integer userId){
@@ -43,27 +43,23 @@ public class UserService {
         //Hint: Take out all the Webseries from the WebRepository
 //
         User user = userRepository.findById(userId).get();
-        List<WebSeries> listweb =new ArrayList<>();
-        if(userRepository.findById(userId).isPresent()){
-            SubscriptionType subscriptionType=user.getSubscription().getSubscriptionType();
-            List<WebSeries> allWebSeries = webSeriesRepository.findAll();
 
+        List<WebSeries> allWebSeries = webSeriesRepository.findAll();
+        int count =0;
 
-            for(WebSeries web : allWebSeries){
-                if(web.getAgeLimit()<=user.getAge() && web.getSubscriptionType().equals(user.getSubscription().getSubscriptionType())){
-                    listweb.add(web);
-                }
+        for(WebSeries web : allWebSeries){
+            if(web.getAgeLimit()<=user.getAge() && user.getSubscription().getSubscriptionType()==SubscriptionType.ELITE){
+                count ++;
+            }if(web.getAgeLimit()<=user.getAge() && user.getSubscription().getSubscriptionType()==SubscriptionType.PRO && (web.getSubscriptionType()==SubscriptionType.BASIC || web.getSubscriptionType()==SubscriptionType.PRO) ){
+                count++;
+            }if(web.getAgeLimit()<=user.getAge() && user.getSubscription().getSubscriptionType()==SubscriptionType.BASIC && web.getSubscriptionType()==SubscriptionType.BASIC){
+                count++;
             }
-
         }
 
+        return count;
 
 
-
-
-
-
-        return listweb.size();
     }
 
 
