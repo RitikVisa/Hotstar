@@ -49,10 +49,11 @@ public class SubscriptionService {
             totalAmount = subscriptionAmount+(250*newSubscription.getNoOfScreensSubscribed());
         }
         if(subscriptionAmount==1000) {
-            totalAmount = subscriptionAmount + (200 * newSubscription.getNoOfScreensSubscribed());
+            totalAmount = subscriptionAmount + (350 * newSubscription.getNoOfScreensSubscribed());
         }
 
         newSubscription.setTotalAmountPaid(totalAmount);
+        user.setSubscription(newSubscription);
         userRepository.save(user);
 
         return totalAmount;
@@ -99,7 +100,7 @@ public class SubscriptionService {
 
         //We need to find out total Revenue of hotstar : from all the subscriptions combined
         //Hint is to use findAll function from the SubscriptionDb
-        Integer revenue =0;
+        int revenue =0;
 
         List<Subscription> subscriptionList = new ArrayList<>();
         subscriptionList= subscriptionRepository.findAll();
